@@ -2,6 +2,7 @@ venv/
 .vscode/
 __pycache__/
 test.db
+/$APPDATA/npm/node_modules
 
 # OS generated files #
 ######################

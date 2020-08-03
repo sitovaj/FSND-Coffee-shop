@@ -16,7 +16,7 @@ CORS(app)
 !! NOTE THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 '''
-db_drop_and_create_all()
+# db_drop_and_create_all()
 
 # ROUTES
 '''
@@ -82,13 +82,13 @@ def get_drinks_details(payload):
 @requires_auth('post:drinks')
 def post_drinks(payload):
     body = request.get_json()  # get drink information
-    if body == None:
+    if body is None:
         abort(404)
-    # from request get necessary info on new drink, if it's not given, then it'll be None
+    # from request get info on new drink, if it's not given, then it'll be None
     new_drink_title = body.get('title', None)
     new_recipe = body.get('recipe', None)
     try:
-        drink = Drink(title=new_drink_title, recipe=json.dumps([new_recipe]))
+        drink = Drink(title=new_drink_title, recipe=json.dumps(new_recipe))
         drink.insert()
         return jsonify({
             'success': True,
@@ -98,7 +98,7 @@ def post_drinks(payload):
         return jsonify({
             "status": False,
             "message": "This title already exists"})
-    except:
+    except Exception:
         abort(422)
 
 
@@ -134,7 +134,7 @@ def patch_drinks(payload, id):
             'success': True,
             "drinks": [drink.long()]
         })
-    except:
+    except Exception:
         if not drink:
             abort(404)
         abort(400)
@@ -160,6 +160,7 @@ def delete_drinks(payload, id):
             Drink.id == id).one_or_none()  # find drink by id
         # if drink is None:
         #     abort(404)
+        # replaced with "if not drink:", as it was not working properly
         if not drink:
             raise
         drink.delete()
@@ -168,7 +169,7 @@ def delete_drinks(payload, id):
             'success': True,
             'delete': id
         })
-    except:
+    except Exception:
         if not drink:
             abort(404)
         abort(400)
@@ -193,7 +194,7 @@ def unprocessable(error):
 @DONE implement error handlers using the @app.errorhandler(error) decorator
     each error handler should return (with approprate messages):
              jsonify({
-                    "success": False, 
+                    "success": False,
                     "error": 404,
                     "message": "resource not found"
                     }), 404
@@ -239,7 +240,7 @@ def not_allowed(error):
 
 '''
 @DONE implement error handler for AuthError
-    error handler should conform to general task above 
+    error handler should conform to general task above
 '''
 
 

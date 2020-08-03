@@ -41,8 +41,7 @@ def get_token_auth_header():
     auth_header = request.headers['Authorization']
     # split by symbol ' ', as expecting to get "bearer value", [1] - only "value" is needed
     header_parts = auth_header.split(' ')
-
- # checking that we receive both parts of Bearer in 'Authorization' header
+    # checking that we receive both parts of Bearer in 'Authorization' header
     if len(header_parts) != 2:
         abort(401)
         # checking that we receive first part of Bearer in 'Authorization' header is equal to 'bearer'
@@ -154,7 +153,7 @@ def requires_auth(permission=''):
             token = get_token_auth_header()
             try:
                 payload = verify_decode_jwt(token)
-            except:
+            except Exception:
                 abort(401)
             check_permissions(permission, payload)
             return f(payload, *args, **kwargs)
